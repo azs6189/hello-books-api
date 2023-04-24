@@ -1,5 +1,5 @@
 # Blueprint is a Flask class that provides a pattern for grouping related routes(endpoints)
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, abort, make_response
 
 # Creates a Book class
 
@@ -40,13 +40,13 @@ def handle_books():
 
 @books_bp.route("/<book_id>", methods=["GET"])
 # Defines an endpoint that returns a response of the id, title, and description for one book
-def handle_book(book_id):
-    """Returns response body: dictionary literal for one book with matching book_id"""
+def validate_book(book_id):
+    """Helpr function that handles invalid book_id"""
     try:
         book_id = int(book_id)
 
     except:
-        return {"message": f"book {book_id} invalid"}, 400
+        abort(make_response({"message": f"book {book_id} invalid"}, 400))
 
     for book in books:
         if book.id == book_id:
@@ -55,4 +55,16 @@ def handle_book(book_id):
                 "title": book.title,
                 "description": book.description
             }
-        return {"message": f"book {book_id} not found"}, 404
+
+    abort(make_response({"message": f"book {book_id} not found"}, 404))
+
+
+def handle_book(book_id):
+    """Returns response body: dictionary literal for one book with matching book_id"""
+    book = validate_book(book_id)
+
+    return {
+        "id": book.id,
+        "title": book.title,
+        "description": book.description
+    }
