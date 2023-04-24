@@ -24,9 +24,9 @@ books_bp = Blueprint("books", __name__, url_prefix="/books")
 
 
 @books_bp.route("", methods=["GET"])
-# Endpoint that will returns a response of list of books in JSON format
+# Defines an endpoint that returns a response of list of books in JSON format
 def handle_books():
-    """Returns response body, list of books, in JSON format"""
+    """Returns response body: list of books, in JSON format"""
     books_response = []
     for book in books:
         books_response.append({
@@ -34,4 +34,20 @@ def handle_books():
             "title": book.title,
             "description": book.description
         })
+    # Returns and converts the list into an HTTP response body
     return jsonify(books_response)
+
+
+@books_bp.route("/<book_id>", methods=["GET"])
+# Defines an endpoint that returns a response of the id, title, and description for one book
+def handle_book(book_id):
+    """Returns response body: dictionary literal for one book with matching book_id"""
+    book_id = int(book_id)
+    for book in books:
+        if book.id == book_id:
+            return {
+                "id": book.id,
+                "title": book.title,
+                "description": book.description
+            }
+        return {"message": f"book {book_id} not found"}, 404
