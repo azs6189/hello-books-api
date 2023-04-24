@@ -1,5 +1,5 @@
 # Blueprint is a Flask class that provides a pattern for grouping related routes(endpoints)
-from flask import Blueprint
+from flask import Blueprint, jsonify
 
 
 class Book:
@@ -16,3 +16,15 @@ books = [
 ]
 
 books_bp = Blueprint("books", __name__, url_prefix="/books")
+
+
+@books_bp.route("", methods=["GET"])
+def handle_books():
+    books_response = []
+    for book in books:
+        books_response.append({
+            "id": book.id,
+            "title": book.title,
+            "description": book.description
+        })
+    return jsonify(books_response)
