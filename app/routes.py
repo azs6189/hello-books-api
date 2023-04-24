@@ -1,9 +1,12 @@
 # Blueprint is a Flask class that provides a pattern for grouping related routes(endpoints)
 from flask import Blueprint, jsonify
 
+# Creates a Book class
+
 
 class Book:
     def __init__(self, id, title, description):
+        """Constructor with Book class attributes"""
         self.id = id
         self.title = title
         self.description = description
