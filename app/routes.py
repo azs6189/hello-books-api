@@ -9,17 +9,21 @@ class Book:
         self.description = description
 
 
+# Creates a list of Book instances
 books = [
     Book(1, "Fictional Book", "A fantasy novel set in an imaginary world."),
     Book(2, "Wheel of Time", "A fantasy novel set in an imaginary world."),
     Book(3, "Fictional Book Title", "A fantasy novel set in an imaginary world.")
 ]
 
+# Instantiates a Blueprint
 books_bp = Blueprint("books", __name__, url_prefix="/books")
 
 
 @books_bp.route("", methods=["GET"])
+# Endpoint that will returns a response of list of books in JSON format
 def handle_books():
+    """Returns response body, list of books, in JSON format"""
     books_response = []
     for book in books:
         books_response.append({
