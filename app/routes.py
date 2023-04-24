@@ -42,7 +42,12 @@ def handle_books():
 # Defines an endpoint that returns a response of the id, title, and description for one book
 def handle_book(book_id):
     """Returns response body: dictionary literal for one book with matching book_id"""
-    book_id = int(book_id)
+    try:
+        book_id = int(book_id)
+
+    except:
+        return {"message": f"book {book_id} invalid"}, 400
+
     for book in books:
         if book.id == book_id:
             return {
