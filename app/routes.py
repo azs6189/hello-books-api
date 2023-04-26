@@ -42,6 +42,7 @@ def handle_books():
 
 @books_bp.route("/<book_id>", methods=["GET"])
 def validate_book(book_id):
+    """Validates book_id before returning a book description"""
     try:
         book_id = int(book_id)
     except:
