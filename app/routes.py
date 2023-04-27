@@ -1,8 +1,6 @@
 # Blueprint is a Flask class that provides a pattern for grouping related routes(endpoints)
 from flask import Blueprint, jsonify, abort, make_response
 
-# Creates a Book class
-
 
 class Book:
     def __init__(self, id, title, description):
@@ -24,7 +22,6 @@ books_bp = Blueprint("books", __name__, url_prefix="/books")
 
 
 @books_bp.route("", methods=["GET"])
-# Defines an endpoint that returns a response of list of books in JSON format
 def handle_books():
     """Returns response body: list of books, in JSON format"""
     books_response = []
@@ -36,8 +33,6 @@ def handle_books():
         })
     # Returns and converts the list into an HTTP response body
     return jsonify(books_response)
-
-# Defines an endpoint that returns a response of the id, title, and description for one book
 
 
 @books_bp.route("/<book_id>", methods=["GET"])
