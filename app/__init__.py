@@ -23,6 +23,10 @@ def create_app(test_config=None):
     # Import models here
     from app.models.book import Book
 
+    # Initializes Flask-Migrate extension using the init_app method to connect db and migrate to our Flask app
+    db.init_app(app)
+    migrate.init_app(app, db)
+
     # Register Blueprints here
     from .routes import books_bp
     app.register_blueprint(books_bp)
