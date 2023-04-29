@@ -3,6 +3,7 @@ from flask import Flask
 
 
 def create_app(test_config=None):
+    """Starting boilerplate code to start a Flask application"""
     app = Flask(__name__)
 
     # Register Blueprints here
