@@ -10,33 +10,32 @@ books_bp = Blueprint("books", __name__, url_prefix="/books")
 # Decorator that uses the books_bp Blueprint to define an endpoint and accepted HTTP method
 
 
+@books_bp.route("", methods=["POST"])
+def create_book():
+    request_body = request.get_json()
+    # Creates an instance of Book using the data in request_body
+    new_book = Book(title=request_body["title"],
+                    description=request_body["description"])
+    db.session.add(new_book)
+    db.session.commit()
+    # make_response() function instantiates a Response object
+    # the first parameter to make_response() is the HTTP response body.
+    # defines the status code of the Response by passing an integer as the second argument to make_response(). When a second argument isn't specified, 200 is always the default value.
+    return make_response(f"Book {new_book.title} successfully created", 201)
+
+
 @books_bp.route("", methods=["GET", "POST"])
-def handle_books():
-    """Returns the HTTP response"""
-    if request.method == "GET":
-        # Book.query.all() method returns a list of instances of Book
-        books = Book.query.all()
-        books_response = []
-        for book in books:
-            books_response.append({
-                "id": book.id,
-                "title": book.title,
-                "description": book.description
-            })
-        return jsonify(books_response), 200
-
-    elif request.method == "POST":
-
-        request_body = request.get_json()
-        # Creates an instance of Book using the data in request_body
-        new_book = Book(title=request_body["title"],
-                        description=request_body["description"])
-        db.session.add(new_book)
-        db.session.commit()
-        # make_response() function instantiates a Response object
-        # the first parameter to make_response() is the HTTP response body.
-        # defines the status code of the Response by passing an integer as the second argument to make_response(). When a second argument isn't specified, 200 is always the default value.
-        return make_response(f"Book {new_book.title} successfully created", 201)
+def read_all_books():
+    books_response = []
+    # Book.query.all() method returns a list of instances of Book
+    books = Book.query.all()
+    for book in books:
+        books_response.append({
+            "id": book.id,
+            "title": book.title,
+            "description": book.description
+        })
+    return jsonify(books_response), 200
 
 
 # ---------- Hardcoded Books data and two routes from the app commented out ----------
