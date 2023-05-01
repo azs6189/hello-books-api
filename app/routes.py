@@ -38,10 +38,15 @@ def read_all_books():
     return jsonify(books_response), 200
 
 # We are setting up a new route, so we must use the Blueprint decorator to define it
+# book_id function parameter must match the route parameter in the decorator
+# It will receive the part of the request path that lines up with the placeholder in the route
 
 
 @books_bp.route("/<book_id>", methods=["GET"])
 def handle_book(book_id):
+    # This is SQLAlchemy syntax to query for one Book resource
+    # This method returns an instance of Book
+    # The primary key of a book must be used here, book_id, which was provided as the route parameter
     book = Book.query.get(book_id)
 
     return {
