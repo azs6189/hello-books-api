@@ -7,6 +7,20 @@ from flask import Blueprint, jsonify, abort, make_response, request
 # Instantiates a Blueprint instance
 books_bp = Blueprint("books", __name__, url_prefix="/books")
 
+
+def validate_book(book_id):
+    try:
+        book_id = int(book_id)
+    except:
+        abort(make_response({"message": f"book {book_id} invalid"}, 400))
+
+    book = Book.query.get(book_id)
+
+    if not book:
+        abort(make_response({"message": f"book {book_id} not found"}, 404))
+
+    return book
+
 # Decorator that uses the books_bp Blueprint to define an endpoint and accepted HTTP method
 
 
@@ -43,11 +57,11 @@ def read_all_books():
 
 
 @books_bp.route("/<book_id>", methods=["GET"])
-def handle_book(book_id):
+def read_one_book(book_id):
     # This is SQLAlchemy syntax to query for one Book resource
     # This method returns an instance of Book
     # The primary key of a book must be used here, book_id, which was provided as the route parameter
-    book = Book.query.get(book_id)
+    book = validate_book(book_id)
 
     return {
         "id": book.id,
