@@ -24,7 +24,7 @@ def create_book():
     return make_response(f"Book {new_book.title} successfully created", 201)
 
 
-@books_bp.route("", methods=["GET", "POST"])
+@books_bp.route("", methods=["GET"])
 def read_all_books():
     books_response = []
     # Book.query.all() method returns a list of instances of Book
@@ -38,6 +38,7 @@ def read_all_books():
     return jsonify(books_response), 200
 
 
+@books_bp.route("", methods)
 # ---------- Hardcoded Books data and two routes from the app commented out ----------
 # class Book:
 #     def __init__(self, id, title, description):
