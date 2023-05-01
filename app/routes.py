@@ -37,6 +37,8 @@ def read_all_books():
         })
     return jsonify(books_response), 200
 
+# We are setting up a new route, so we must use the Blueprint decorator to define it
+
 
 @books_bp.route("/<book_id>", methods=["GET"])
 def handle_book(book_id):
