@@ -38,6 +38,17 @@ def read_all_books():
     return jsonify(books_response), 200
 
 
+@books_bp.route("/<book_id>", methods=["GET"])
+def handle_book(book_id):
+    book = Book.query.get(book_id)
+
+    return {
+        "id": book.id,
+        "title": book.title,
+        "description": book.description
+    }
+
+
 # ---------- Hardcoded Books data and two routes from the app commented out ----------
 # class Book:
 #     def __init__(self, id, title, description):
