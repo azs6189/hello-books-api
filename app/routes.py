@@ -40,16 +40,26 @@ def create_book():
 
 @books_bp.route("", methods=["GET"])
 def read_all_books():
+    # Tries to get a query param called title from the rquest
+    # This returns the value of the query param if it was set, or None if the query param is not found
+    title_query = request.args.get("title")
+
+    if title_query:
+        books = Book.query.filter_by(title=title_query)
+    else:
+        # Book.query.all() method returns a list of instances of Book
+        books = Book.query.all()
+
+
     books_response = []
-    # Book.query.all() method returns a list of instances of Book
-    books = Book.query.all()
+    
     for book in books:
         books_response.append({
             "id": book.id,
             "title": book.title,
             "description": book.description
         })
-    return jsonify(books_response), 200
+    return jsonify(books_response)
 
 # We are setting up a new route, so we must use the Blueprint decorator to define it
 # book_id function parameter must match the route parameter in the decorator
