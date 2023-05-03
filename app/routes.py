@@ -35,7 +35,7 @@ def create_book():
     # make_response() function instantiates a Response object
     # the first parameter to make_response() is the HTTP response body.
     # defines the status code of the Response by passing an integer as the second argument to make_response(). When a second argument isn't specified, 200 is always the default value.
-    return make_response(f"Book {new_book.title} successfully created", 201)
+    return make_response(jsonify(f"Book {new_book.title} successfully created"), 201)
 
 
 @books_bp.route("", methods=["GET"])
@@ -50,9 +50,8 @@ def read_all_books():
         # Book.query.all() method returns a list of instances of Book
         books = Book.query.all()
 
-
     books_response = []
-    
+
     for book in books:
         books_response.append({
             "id": book.id,
