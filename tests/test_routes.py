@@ -1,7 +1,7 @@
+from werkzeug.exceptions import HTTPException
+from app.routes import validate_model
 from app.models.book import Book
 import pytest
-from werkzeug.exceptions import HTTPException
-from app.routes import validate_book
 
 
 def test_get_all_books_with_no_records(client):
@@ -66,29 +66,25 @@ def test_get_all_books_with_title_query_matching_one(client, two_saved_books):
         "description": "watr 4evr"
     }
 
-# When we call `read_one_book` with a numeric ID that doesn't have a record, we get the expected error message
 
-
-def test_get_one_book_id_not_found(client, two_saved_books):
+def test_get_one_book_missing_record(client, two_saved_books):
     # Act
     response = client.get("/books/3")
     response_body = response.get_json()
 
     # Assert
     assert response.status_code == 404
-    assert response_body == {"message": "book 3 not found"}
-
-# When we call `read_one_book` with a non-numeric ID, we get the expected error message
+    assert response_body == {"message": "Book 3 not found"}
 
 
-def test_get_one_book_id_invalid(client, two_saved_books):
+def test_get_one_book_invalid_id(client, two_saved_books):
     # Act
     response = client.get("/books/cat")
     response_body = response.get_json()
 
     # Assert
     assert response.status_code == 400
-    assert response_body == {"message": "book cat invalid"}
+    assert response_body == {"message": "Book cat invalid"}
 
 
 def test_get_one_book(client, two_saved_books):
@@ -208,7 +204,7 @@ def test_update_book_missing_record(client, two_saved_books):
 
     # Assert
     assert response.status_code == 404
-    assert response_body == {"message": "book 3 not found"}
+    assert response_body == {"message": "Book 3 not found"}
 
 
 def test_update_book_invalid_id(client, two_saved_books):
@@ -224,7 +220,7 @@ def test_update_book_invalid_id(client, two_saved_books):
 
     # Assert
     assert response.status_code == 400
-    assert response_body == {"message": "book cat invalid"}
+    assert response_body == {"message": "Book cat invalid"}
 
 
 def test_delete_book(client, two_saved_books):
@@ -244,7 +240,7 @@ def test_delete_book_missing_record(client, two_saved_books):
 
     # Assert
     assert response.status_code == 404
-    assert response_body == {"message": "book 3 not found"}
+    assert response_body == {"message": "Book 3 not found"}
 
 
 def test_delete_book_invalid_id(client, two_saved_books):
@@ -254,12 +250,13 @@ def test_delete_book_invalid_id(client, two_saved_books):
 
     # Assert
     assert response.status_code == 400
-    assert response_body == {"message": "book cat invalid"}
+    assert response_body == {"message": "Book cat invalid"}
 
 
-def test_validate_book(two_saved_books):
+def test_validate_model(two_saved_books):
     # Act
-    result_book = validate_book(1)
+    # Add `Book` argument to `validate_model` invocation
+    result_book = validate_model(Book, 1)
 
     # Assert
     assert result_book.id == 1
@@ -267,28 +264,17 @@ def test_validate_book(two_saved_books):
     assert result_book.description == "watr 4evr"
 
 
-def test_validate_book_missing_record(two_saved_books):
+def test_validate_model_missing_record(two_saved_books):
     # Act & Assert
-    # Calling `validate_book` without being invoked by a route will
+    # Calling `validate_model` without being invoked by a route will
     # cause an `HTTPException` when an `abort` statement is reached
     with pytest.raises(HTTPException):
-        result_book = validate_book("3")
+        result_book = validate_model(Book, "3")
 
 
-def test_validate_book_invalid_id(two_saved_books):
+def test_validate_model_invalid_id(two_saved_books):
     # Act & Assert
-    # Calling `validate_book` without being invoked by a route will
+    # Calling `validate_model` without being invoked by a route will
     # cause an `HTTPException` when an `abort` statement is reached
     with pytest.raises(HTTPException):
-        result_book = validate_book("cat")
-
-
-def test_validate_book(two_saved_books):
-    # Act
-    # Add `Book` argument to `validate_book` invocation
-    result_book = validate_book(Book, 1)
-
-    # Assert
-    assert result_book.id == 1
-    assert result_book.title == "Ocean Book"
-    assert result_book.description == "watr 4evr"
+        result_book = validate_model(Book, "cat")
