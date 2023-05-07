@@ -13,3 +13,10 @@ class Book(db.Model):
         book_as_dict["description"] = self.description
 
         return book_as_dict
+
+    @classmethod
+    def from_dict(cls, book_data):
+        """Takes in a dictionary and returns a new Book instance"""
+        new_book = Book(title=book_data["title"],
+                        description=book_data["description"])
+        return new_book
