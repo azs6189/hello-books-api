@@ -68,11 +68,7 @@ def read_one_book(book_id):
     # The primary key of a book must be used here, book_id, which was provided as the route parameter
     book = validate_book(book_id)
 
-    return {
-        "id": book.id,
-        "title": book.title,
-        "description": book.description
-    }
+    return book.to_dict()
 
 
 @books_bp.route("/<book_id>", methods=["PUT"])
