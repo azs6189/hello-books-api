@@ -8,7 +8,7 @@ from flask import Blueprint, jsonify, abort, make_response, request
 books_bp = Blueprint("books", __name__, url_prefix="/books")
 
 
-def validate_book(cls, book_id):
+def validate_book(book_id):
     try:
         book_id = int(book_id)
     except:
