@@ -28,8 +28,8 @@ def validate_book(book_id):
 def create_book():
     request_body = request.get_json()
     # Creates an instance of Book using the data in request_body
-    new_book = Book(title=request_body["title"],
-                    description=request_body["description"])
+    new_book = Book.from_dict(request_body)
+
     db.session.add(new_book)
     db.session.commit()
     # make_response() function instantiates a Response object
