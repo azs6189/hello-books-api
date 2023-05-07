@@ -5,21 +5,23 @@ from app.models.book import Book
 from flask import Blueprint, jsonify, abort, make_response, request
 
 # Instantiates a Blueprint instance
-books_bp = Blueprint("books", __name__, url_prefix="/books")
+books_bp = Blueprint("books_bp", __name__, url_prefix="/books")
 
 
-def validate_book(cls, book_id):
+def validate_model(cls, model_id):
     try:
-        book_id = int(book_id)
+        model_id = int(model_id)
     except:
-        abort(make_response({"message": f"book {book_id} invalid"}, 400))
+        abort(make_response(
+            {"message": f"{cls.__name__} {model_id} invalid"}, 400))
 
-    book = Book.query.get(book_id)
+    model = cls.query.get(model_id)
 
-    if not book:
-        abort(make_response({"message": f"book {book_id} not found"}, 404))
+    if not model:
+        abort(make_response(
+            {"message": f"{cls.__name__} {model_id} not found"}, 404))
 
-    return book
+    return model
 
 # Decorator that uses the books_bp Blueprint to define an endpoint and accepted HTTP method
 
@@ -66,14 +68,14 @@ def read_one_book(book_id):
     # This is SQLAlchemy syntax to query for one Book resource
     # This method returns an instance of Book
     # The primary key of a book must be used here, book_id, which was provided as the route parameter
-    book = validate_book(book_id)
+    book = validate_model(Book, book_id)
 
     return book.to_dict()
 
 
 @books_bp.route("/<book_id>", methods=["PUT"])
 def update_book(book_id):
-    book = validate_book(book_id)
+    book = validate_model(Book, book_id)
 
     request_body = request.get_json()
 
@@ -87,7 +89,7 @@ def update_book(book_id):
 
 @books_bp.route("/<book_id>", methods=["DELETE"])
 def delete_book(book_id):
-    book = validate_book(book_id)
+    book = validate_model(Book, book_id)
 
     db.session.delete(book)
     db.session.commit()
