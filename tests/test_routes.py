@@ -279,3 +279,14 @@ def test_validate_book_invalid_id(two_saved_books):
     # cause an `HTTPException` when an `abort` statement is reached
     with pytest.raises(HTTPException):
         result_book = validate_book("cat")
+
+
+def test_validate_book(two_saved_books):
+    # Act
+    # Add `Book` argument to `validate_book` invocation
+    result_book = validate_book(Book, 1)
+
+    # Assert
+    assert result_book.id == 1
+    assert result_book.title == "Ocean Book"
+    assert result_book.description == "watr 4evr"
