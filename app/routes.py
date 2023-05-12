@@ -6,6 +6,7 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 # Instantiates a Blueprint instance
 books_bp = Blueprint("books_bp", __name__, url_prefix="/books")
+authors_bp = Blueprint("authors_bp", __name__, url_prefix="/authors")
 
 
 def validate_model(cls, model_id):
