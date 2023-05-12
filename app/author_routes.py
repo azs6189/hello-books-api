@@ -17,3 +17,18 @@ def create_author():
     db.session.commit()
 
     return make_response(jsonify(f"Author {new_author.name} successfully created"), 201)
+
+
+@authors_bp.route("", methods=["GET"])
+def read_all_authors():
+
+    authors = Author.query.all()
+
+    authors_response = []
+    for author in authors:
+        authors_response.append(
+            {
+                "name": author.name
+            }
+        )
+    return jsonify(authors_response)
