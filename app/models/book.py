@@ -5,8 +5,8 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String)
     description = db.Column(db.String)
-    # establishes the parent-child relatipnship
-    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+    # establishes the one-to-many relationship
+    author_id = db.Column(db.Integer, db.ForeignKey("author.id"))
     author = db.relationship("Author", back_populates="books")
 
     def to_dict(self):
