@@ -18,3 +18,18 @@ def create_genre():
     db.session.commit()
 
     return make_response(jsonify(f"Genre {new_genre.name} successfully created"), 201)
+
+
+@genres_bp.route("", methods=["GET"])
+def read_all_genres():
+
+    genres = Genre.query.all()
+
+    genres_response = []
+    for genre in genres:
+        genres_response.append(
+            {
+                "name": genre.name
+            }
+        )
+    return jsonify(genres_response)
