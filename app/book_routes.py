@@ -8,7 +8,6 @@ from flask import Blueprint, jsonify, abort, make_response, request
 books_bp = Blueprint("books_bp", __name__, url_prefix="/books")
 
 
-
 def validate_model(cls, model_id):
     try:
         model_id = int(model_id)
