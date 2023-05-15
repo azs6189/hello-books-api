@@ -56,4 +56,6 @@ def create_app(test_config=None):
     from .genre_routes import genres_bp
     app.register_blueprint(genres_bp)
 
+    from app.models.book_genre import BookGenre
+
     return app
